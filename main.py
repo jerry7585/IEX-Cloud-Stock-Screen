@@ -4,6 +4,7 @@ import requests #a popular http library for making http requests, typically thro
 import xlsxwriter #creating and manipulating excel files in python
 import math #python mathematical functions
 
+from my_secrets import IEX_CLOUD_API_TOKEN
 #API Token is in a secrets.py file
 
-print(MY_PUBLISHABLE_API_TOKEN)
+print(IEX_CLOUD_API_TOKEN)
