@@ -1,7 +1,7 @@
 import requests #a popular http library for making http requests, typically through an api, very slow if we can use batch calls it is better
 import xlsxwriter #creating and manipulating excel files in python
+
 from my_secrets import IEX_CLOUD_API_TOKEN
-#main method to call the API and perform a GET request
 
 #base URL for the IEX Cloud API, global variable, never changes
 base_url = 'https://api.iex.cloud/v1/data/core/quote'
@@ -28,7 +28,7 @@ key_parameters = {
     "ytdChange"
 }
 
-workbook = xlsxwriter.Workbook('stock_parameters.xlsx')
+dictionary = {}
 
 def fetch_stock_data(ticker):
     
@@ -43,22 +43,14 @@ def fetch_stock_data(ticker):
 
     #Check if successful, code is 200 when success
     if response.status_code == 200:
-        worksheet = workbook.add_worksheet()
-        worksheet.write('A1', 'Parameter')
-        worksheet.write('B1', 'Value')
                 
         # Extract the stock quote data from the response JSON
-        stock_data = response.json()[0]
+        data = response.json()[0]
 
-        # Print the stock quote data
-        row = 1
-        for k,v in stock_data.items():
-            if k in key_parameters:
-                worksheet.write(row,0,k)
-                worksheet.write(row,1,v)
-                row += 1
-            
-        workbook.close()
+        #parse it into a dictionary
+        for k,v in data.items():
+            dictionary[k] = v
+             
     else:
         #Print an error message
         print(f"Failed to fetch stock quote for {ticker}. Status code: ", response.status_code)
